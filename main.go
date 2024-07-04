@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/rs/cors"
 )
 
 type Response struct {
@@ -37,6 +38,7 @@ func GenerateToken(apiKey, apiSecret string) (string, error) {
 		return "", err
 	}
 
+	log.Println("Token Sent!")
 	return tokenString, nil
 }
 
@@ -59,7 +61,13 @@ func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/get-token", GetTokenHandler)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:3000"},
+		AllowedMethods: []string{http.MethodPost},
+		AllowedHeaders: []string{"Content-Type"},
+	})
+
+	http.Handle("/get-token", c.Handler(http.HandlerFunc(GetTokenHandler)))
 	log.Println("Server running on port 8080...")
 	http.ListenAndServe(":8080", nil)
 }
