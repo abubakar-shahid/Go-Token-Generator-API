@@ -46,7 +46,7 @@ func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenString, err := GenerateToken(requestBody.UserInfo.APIKey, requestBody.UserInfo.APISecret)
+	tokenString, err := GenerateToken(requestBody.UserInfo.APIKey, requestBody.APISecret)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -54,10 +54,4 @@ func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	response := Response{Token: tokenString}
 	json.NewEncoder(w).Encode(response)
-}
-
-func main() {
-	http.HandleFunc("/get-token", GetTokenHandler)
-	fmt.Println("Server running at port 8080...")
-	http.ListenAndServe(":8080", nil)
 }
