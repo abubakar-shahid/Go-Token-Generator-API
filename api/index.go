@@ -32,8 +32,7 @@ func GenerateToken(apiKey, apiSecret string) (string, error) {
 	tokenString, err := token.SignedString([]byte(apiSecret))
 
 	if err != nil {
-		fmt.Errorf("Something Went Wrong: %s", err.Error())
-		return "", err
+		return "", fmt.Errorf("Something Went Wrong: %s", err.Error())
 	}
 
 	return tokenString, nil
@@ -57,7 +56,7 @@ func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func handler() {
+func main() {
 	http.HandleFunc("/get-token", GetTokenHandler)
 	fmt.Println("Server running at port 8080...")
 	http.ListenAndServe(":8080", nil)
