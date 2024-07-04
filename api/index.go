@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"encoding/json"
@@ -57,7 +57,7 @@ func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func main() {
+func handler() {
 	http.HandleFunc("/get-token", GetTokenHandler)
 	fmt.Println("Server running at port 8080...")
 	http.ListenAndServe(":8080", nil)
